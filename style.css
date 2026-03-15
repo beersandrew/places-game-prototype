@@ -12,3 +12,35 @@ body {
 #game {
   line-height: 1.6;
 }
+
+h2 {
+  margin-bottom: 0.25rem;
+}
+
+.actions,
+.doors {
+  margin-top: 1rem;
+}
+
+button {
+  display: block;
+  margin: 0.5rem 0;
+  padding: 0.5rem 1rem;
+  font-family: Georgia, serif;
+  font-size: 1rem;
+  background: #2a2a2a;
+  color: #e0e0e0;
+  border: 1px solid #555;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #3a3a3a;
+}
+
+.win-message {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #8f8;
+  margin-top: 1rem;
+}
