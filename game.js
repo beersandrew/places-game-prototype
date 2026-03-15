@@ -31,6 +31,14 @@ const ROOMS = {
         ],
       },
     ],
+    actions: [
+      {
+        id: 'play_tictactoe',
+        label: 'Play tic-tac-toe',
+        available: (state) => state.tictactoe !== 'won',
+        perform: (state) => ({ ...state, tictactoe: 'won' }),
+      },
+    ],
   },
   'toy room': {
     id: 'toy room',
@@ -45,6 +53,14 @@ const ROOMS = {
         ],
       },
     ],
+    actions: [
+      {
+        id: 'put_car_in_box',
+        label: 'Put the car in the box',
+        available: (state) => state.box !== 'car',
+        perform: (state) => ({ ...state, box: 'car' }),
+      },
+    ],
   },
   garage: {
     id: 'garage',
@@ -57,6 +73,18 @@ const ROOMS = {
           { condition: (state) => state.inventory.has('wire'), room: 'elevator' },
           { room: 'fortune teller' },
         ],
+      },
+    ],
+    actions: [
+      {
+        id: 'take_wire',
+        label: 'Take the wire',
+        available: (state) => !state.inventory.has('wire'),
+        perform: (state) => {
+          const newInventory = new Set(state.inventory);
+          newInventory.add('wire');
+          return { ...state, inventory: newInventory };
+        },
       },
     ],
   },
@@ -221,6 +249,28 @@ function isRunActive(state) {
   return state.runState === 'active';
 }
 
+/**
+ * Returns the actions available in the player's current room given the current state.
+ * Only includes actions whose available() check returns true.
+ */
+function getAvailableActions(state) {
+  const room = ROOMS[state.currentRoom];
+  if (!room || !room.actions) return [];
+  return room.actions.filter((action) => action.available(state));
+}
+
+/**
+ * Performs the named action in the current room. Returns new state.
+ * Returns state unchanged if the action is not found or not available.
+ */
+function performAction(state, actionId) {
+  const room = ROOMS[state.currentRoom];
+  if (!room || !room.actions) return state;
+  const action = room.actions.find((a) => a.id === actionId);
+  if (!action || !action.available(state)) return state;
+  return action.perform(state);
+}
+
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { ROOMS, getRoom, getAllRoomIds, createInitialState, resolveDestination, navigate, moveToRoom, hasVisited, isRunActive, resolveDoor, getAvailableDoors };
+  module.exports = { ROOMS, getRoom, getAllRoomIds, createInitialState, resolveDestination, navigate, moveToRoom, hasVisited, isRunActive, resolveDoor, getAvailableDoors, getAvailableActions, performAction };
 }
