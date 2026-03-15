@@ -44,3 +44,9 @@ button:hover {
   color: #8f8;
   margin-top: 1rem;
 }
+
+#build-info {
+  margin-top: 3rem;
+  font-size: 0.7rem;
+  color: #555;
+}

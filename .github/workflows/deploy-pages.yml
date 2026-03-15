@@ -23,6 +23,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Stamp build info
+        run: |
+          SHA=$(echo "${{ github.sha }}" | cut -c1-7)
+          TIME=$(date -u +"%Y-%m-%d %H:%M UTC")
+          sed -i "s|<!-- replaced at deploy time -->|Build ${SHA} · ${TIME}|" index.html
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
