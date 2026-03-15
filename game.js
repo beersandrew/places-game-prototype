@@ -199,6 +199,11 @@ function navigate(state) {
     return state;
   }
 
+  // Returning to elevator without wire resets the run
+  if (destination === 'elevator' && !state.inventory.has('wire')) {
+    return createInitialState();
+  }
+
   const newVisited = new Set(state.visitedRooms);
   newVisited.add(destination);
 

@@ -93,6 +93,31 @@ describe('navigate', () => {
     expect(state.visitedRooms).toEqual(new Set(['elevator', 'classroom', 'fortune teller']));
   });
 
+  test('resets state when returning to elevator without wire', () => {
+    let state = createInitialState();
+    state = navigate(state); // elevator → classroom
+    state = performAction(state, 'play_tictactoe');
+    state = navigate(state); // classroom → toy room
+    state = navigate(state); // toy room → fortune teller (no car in box)
+    expect(state.currentRoom).toBe('fortune teller');
+    state = navigate(state); // fortune teller → elevator (no wire = reset)
+    expect(state).toEqual(createInitialState());
+  });
+
+  test('does not reset when returning to elevator with wire', () => {
+    let state = createInitialState();
+    state = navigate(state); // elevator → classroom
+    state = performAction(state, 'play_tictactoe');
+    state = navigate(state); // classroom → toy room
+    state = performAction(state, 'put_car_in_box');
+    state = navigate(state); // toy room → garage
+    state = performAction(state, 'take_wire');
+    state = navigate(state); // garage → elevator (has wire, no reset)
+    expect(state.currentRoom).toBe('elevator');
+    expect(state.inventory.has('wire')).toBe(true);
+    expect(state.tictactoe).toBe('won');
+  });
+
   test('sets runState to won when reaching outside', () => {
     const state = {
       ...createInitialState(),
