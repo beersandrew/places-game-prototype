@@ -1,0 +1,11 @@
+{
+  "name": "places-game-prototype",
+  "version": "0.1.0",
+  "description": "Text adventure prototype for Places Game",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
